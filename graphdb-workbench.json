@@ -1,0 +1,2801 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "GraphDB Workbench API",
+        "contact": {}
+    },
+    "host": "localhost:7200",
+    "basePath": "/",
+    "tags": [
+        {
+            "name": "cluster-management-controller",
+            "description": "Cluster management"
+        },
+        {
+            "name": "import-controller",
+            "description": "Data import"
+        },
+        {
+            "name": "location-management-controller",
+            "description": "Location management"
+        },
+        {
+            "name": "repository-management-controller",
+            "description": "Repository management"
+        },
+        {
+            "name": "saved-queries-controller",
+            "description": "Saved queries"
+        },
+        {
+            "name": "security-management-controller",
+            "description": "Security management"
+        },
+        {
+            "name": "sparql-template-controller",
+            "description": "Sparql Template Controller"
+        },
+        {
+            "name": "sql-views-controller",
+            "description": "Sql Views Controller"
+        },
+        {
+            "name": "stateless-login-controller",
+            "description": "Authentication"
+        }
+    ],
+    "paths": {
+        "/rest/cluster/masters/{masterRepositoryId}": {
+            "get": {
+                "tags": [
+                    "cluster-management-controller"
+                ],
+                "summary": "Get information about a master",
+                "operationId": "getMasterUsingGET",
+                "produces": [
+                    "*/*"
+                ],
+                "parameters": [
+                    {
+                        "name": "masterLocation",
+                        "in": "query",
+                        "description": "master repository location",
+                        "required": false,
+                        "type": "string",
+                        "allowEmptyValue": false
+                    },
+                    {
+                        "name": "masterRepositoryId",
+                        "in": "path",
+                        "description": "master repository ID",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/MasterNode"
+                        }
+                    },
+                    "500": {
+                        "description": "500 message",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "deprecated": false
+            },
+            "post": {
+                "tags": [
+                    "cluster-management-controller"
+                ],
+                "summary": "Set master attribute",
+                "operationId": "setMasterUsingPOST",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "*/*"
+                ],
+                "parameters": [
+                    {
+                        "name": "masterLocation",
+                        "in": "query",
+                        "description": "master repository location",
+                        "required": false,
+                        "type": "string",
+                        "allowEmptyValue": false
+                    },
+                    {
+                        "name": "masterRepositoryId",
+                        "in": "path",
+                        "description": "master repository ID",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "bean",
+                        "description": "bean",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/rest/cluster/masters/{masterRepositoryId}/backup": {
+            "get": {
+                "tags": [
+                    "cluster-management-controller"
+                ],
+                "summary": "Initiate a cluster backup",
+                "operationId": "doBackupUsingGET",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "masterRepositoryId",
+                        "in": "path",
+                        "description": "master repository ID",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "backupName",
+                        "in": "query",
+                        "description": "backupName",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "masterLocation",
+                        "in": "query",
+                        "description": "masterLocation",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "500 message",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/rest/cluster/masters/{masterRepositoryId}/peers": {
+            "post": {
+                "tags": [
+                    "cluster-management-controller"
+                ],
+                "summary": "Connect two masters",
+                "operationId": "connectMastersUsingPOST",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "masterRepositoryId",
+                        "in": "path",
+                        "description": "master repository ID",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "bean",
+                        "description": "bean",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/MasterConnectBean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "deprecated": false
+            },
+            "delete": {
+                "tags": [
+                    "cluster-management-controller"
+                ],
+                "summary": "Disconnect two masters",
+                "operationId": "disconnectMastersUsingDELETE",
+                "produces": [
+                    "*/*"
+                ],
+                "parameters": [
+                    {
+                        "name": "bidirectional",
+                        "in": "query",
+                        "description": "whether to connect the masters in both directions (default)",
+                        "required": false,
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "masterLocation",
+                        "in": "query",
+                        "description": "master repository location",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "masterNodeID",
+                        "in": "query",
+                        "description": "master node id",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "masterRepositoryId",
+                        "in": "path",
+                        "description": "master repository ID",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "peerLocation",
+                        "in": "query",
+                        "description": "the peer repository location",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "peerNodeID",
+                        "in": "query",
+                        "description": "the peer node ID",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "peerRepositoryID",
+                        "in": "query",
+                        "description": "the peer repository ID",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/rest/cluster/masters/{masterRepositoryId}/restore": {
+            "get": {
+                "tags": [
+                    "cluster-management-controller"
+                ],
+                "summary": "Initiate a cluster restore",
+                "operationId": "doRestoreUsingGET",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "masterRepositoryId",
+                        "in": "path",
+                        "description": "master repository ID",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "backupName",
+                        "in": "query",
+                        "description": "backupName",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "masterLocation",
+                        "in": "query",
+                        "description": "masterLocation",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "500 message",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/rest/cluster/masters/{masterRepositoryId}/workers": {
+            "get": {
+                "tags": [
+                    "cluster-management-controller"
+                ],
+                "summary": "Get workers connected to a master",
+                "operationId": "getWorkersForMasterUsingGET",
+                "produces": [
+                    "*/*"
+                ],
+                "parameters": [
+                    {
+                        "name": "masterLocation",
+                        "in": "query",
+                        "description": "master repository location",
+                        "required": false,
+                        "type": "string",
+                        "allowEmptyValue": false
+                    },
+                    {
+                        "name": "masterRepositoryId",
+                        "in": "path",
+                        "description": "master repository id",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/WorkerNode"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "500 message",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "deprecated": false
+            },
+            "post": {
+                "tags": [
+                    "cluster-management-controller"
+                ],
+                "summary": "Connect a worker to a master",
+                "operationId": "connectWorkerUsingPOST",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "masterRepositoryId",
+                        "in": "path",
+                        "description": "master repository ID",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "bean",
+                        "description": "bean",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/WorkerConnectBean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "deprecated": false
+            },
+            "delete": {
+                "tags": [
+                    "cluster-management-controller"
+                ],
+                "summary": "Disconnect a worker from a master",
+                "operationId": "disconnectWorkerUsingDELETE",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "masterLocation",
+                        "in": "query",
+                        "description": "worker repository URL",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "masterRepositoryId",
+                        "in": "path",
+                        "description": "master repository ID",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "workerURL",
+                        "in": "query",
+                        "description": "master repository location",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/rest/cluster/nodes/clone": {
+            "post": {
+                "tags": [
+                    "cluster-management-controller"
+                ],
+                "summary": "Clone a worker",
+                "operationId": "cloneWorkerUsingPOST",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "*/*"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "bean",
+                        "description": "bean",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/WorkerCloneBean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/rest/data/import/server/{repositoryID}": {
+            "get": {
+                "tags": [
+                    "import-controller"
+                ],
+                "summary": "Get server files available for import",
+                "operationId": "listServerFilesUsingGET",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "repositoryID",
+                        "in": "path",
+                        "description": "repositoryID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ImportSettings"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "500 message",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "deprecated": false
+            },
+            "post": {
+                "tags": [
+                    "import-controller"
+                ],
+                "summary": "Import a server file into the repository",
+                "operationId": "importServerFileUsingPOST",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "*/*"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "importBody",
+                        "description": "importBody",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ServerImportBody"
+                        }
+                    },
+                    {
+                        "name": "repositoryID",
+                        "in": "path",
+                        "description": "repositoryID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "deprecated": false
+            },
+            "delete": {
+                "tags": [
+                    "import-controller"
+                ],
+                "summary": "Cancel server file import operation",
+                "operationId": "interruptServerImportUsingDELETE",
+                "produces": [
+                    "*/*"
+                ],
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "The filename import to interrupt.",
+                        "required": false,
+                        "type": "string",
+                        "allowEmptyValue": false
+                    },
+                    {
+                        "name": "repositoryID",
+                        "in": "path",
+                        "description": "repositoryID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/rest/data/import/upload/{repositoryID}/url": {
+            "post": {
+                "tags": [
+                    "import-controller"
+                ],
+                "summary": "Import from data URL into the repository",
+                "operationId": "importUrlUploadUsingPOST",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "*/*"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "importSettings",
+                        "description": "importSettings",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ImportSettings"
+                        }
+                    },
+                    {
+                        "name": "repositoryID",
+                        "in": "path",
+                        "description": "repositoryID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/rest/locations": {
+            "get": {
+                "tags": [
+                    "location-management-controller"
+                ],
+                "summary": "Get all connected GraphDB locations",
+                "operationId": "getAllUsingGET",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Location"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "500 message",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "deprecated": false
+            },
+            "post": {
+                "tags": [
+                    "location-management-controller"
+                ],
+                "summary": "Connect to a remote GraphDB location",
+                "operationId": "addLocationUsingPOST",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "text/plain"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "location",
+                        "description": "location",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Location"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "deprecated": false
+            },
+            "put": {
+                "tags": [
+                    "location-management-controller"
+                ],
+                "summary": "Modify settings for a connected GraphDB location",
+                "operationId": "changeLocationUsingPUT",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "text/plain"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "location",
+                        "description": "location",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/UpdatedLocation"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "deprecated": false
+            },
+            "delete": {
+                "tags": [
+                    "location-management-controller"
+                ],
+                "summary": "Disconnect a GraphDB location",
+                "operationId": "deleteLocationUsingDELETE",
+                "produces": [
+                    "text/plain"
+                ],
+                "parameters": [
+                    {
+                        "name": "uri",
+                        "in": "query",
+                        "description": "The GraphDB location URL",
+                        "required": false,
+                        "type": "string",
+                        "allowEmptyValue": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/rest/locations/activate": {
+            "post": {
+                "tags": [
+                    "location-management-controller"
+                ],
+                "summary": "Activate a connected GraphDB location",
+                "operationId": "activateLocationUsingPOST",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "text/plain"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "locationUri",
+                        "description": "locationUri",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/LocationUri"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/rest/locations/active": {
+            "get": {
+                "tags": [
+                    "location-management-controller"
+                ],
+                "summary": "Get active connected GraphDB location",
+                "operationId": "getActiveLocationUsingGET",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Location"
+                        }
+                    },
+                    "500": {
+                        "description": "500 message",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/rest/locations/active/default-repository": {
+            "post": {
+                "tags": [
+                    "location-management-controller"
+                ],
+                "summary": "Set default repository for active GraphDB location",
+                "operationId": "setDefaultRepositoryUsingPOST",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "text/plain"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "defaultRepositoryLocation",
+                        "description": "defaultRepositoryLocation",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/DefaultRepositoryLocation"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/rest/login/**": {
+            "post": {
+                "tags": [
+                    "stateless-login-controller"
+                ],
+                "summary": "Authenticate user with a password",
+                "operationId": "loginUsingPOST",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "*/*"
+                ],
+                "parameters": [
+                    {
+                        "name": "X-GraphDB-Password",
+                        "in": "header",
+                        "description": "X-GraphDB-Password",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/UserDetails"
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/rest/repositories": {
+            "get": {
+                "tags": [
+                    "repository-management-controller"
+                ],
+                "summary": "Get all repositories in the active location or another location",
+                "operationId": "getRepositoriesUsingGET",
+                "produces": [
+                    "*/*"
+                ],
+                "parameters": [
+                    {
+                        "name": "location",
+                        "in": "query",
+                        "description": "location",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/GraphDBRepository"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "500 message",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "deprecated": false
+            },
+            "post": {
+                "tags": [
+                    "repository-management-controller"
+                ],
+                "summary": "Create a repository in an attached Sesame location (ttl file)",
+                "operationId": "createRepositoryUsingPOST",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "*/*"
+                ],
+                "parameters": [
+                    {
+                        "name": "config",
+                        "in": "formData",
+                        "description": "A ttl configuration file for the repository",
+                        "required": false,
+                        "type": "file"
+                    },
+                    {
+                        "name": "location",
+                        "in": "formData",
+                        "description": "Sesame location",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "constraintFile",
+                        "in": "formData",
+                        "description": "constraintFile",
+                        "required": false,
+                        "type": "file"
+                    },
+                    {
+                        "name": "obdaFile",
+                        "in": "formData",
+                        "description": "obdaFile",
+                        "required": false,
+                        "type": "file"
+                    },
+                    {
+                        "name": "owlFile",
+                        "in": "formData",
+                        "description": "owlFile",
+                        "required": false,
+                        "type": "file"
+                    },
+                    {
+                        "name": "propertiesFile",
+                        "in": "formData",
+                        "description": "propertiesFile",
+                        "required": false,
+                        "type": "file"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/rest/repositories/defaultConfig/{repositoryType}": {
+            "get": {
+                "tags": [
+                    "repository-management-controller"
+                ],
+                "summary": "Get the default repository configuration for the repository type",
+                "operationId": "getDefaultConfigUsingGET",
+                "produces": [
+                    "*/*"
+                ],
+                "parameters": [
+                    {
+                        "name": "repositoryType",
+                        "in": "path",
+                        "description": "repository type: 'se', 'master', 'worker', 'free' or 'ontop'",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "repositoryID",
+                        "in": "query",
+                        "description": "repositoryID",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "repositoryTitle",
+                        "in": "query",
+                        "description": "repositoryTitle",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/RepositoryConfigBean"
+                        }
+                    },
+                    "500": {
+                        "description": "500 message",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/rest/repositories/{repositoryID}": {
+            "get": {
+                "tags": [
+                    "repository-management-controller"
+                ],
+                "summary": "Get repository configuration as JSON",
+                "operationId": "getRepositoryConfigJSONUsingGET",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "location",
+                        "in": "query",
+                        "description": "location",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "repositoryID",
+                        "in": "path",
+                        "description": "repositoryID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "500": {
+                        "description": "500 message",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "deprecated": false
+            },
+            "put": {
+                "tags": [
+                    "repository-management-controller"
+                ],
+                "summary": "Edit repository configuration",
+                "operationId": "editRepositoryUsingPUT",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "*/*"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "bean",
+                        "description": "bean",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/RepositoryConfigBean"
+                        }
+                    },
+                    {
+                        "name": "repositoryID",
+                        "in": "path",
+                        "description": "repositoryID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                },
+                "deprecated": false
+            },
+            "delete": {
+                "tags": [
+                    "repository-management-controller"
+                ],
+                "summary": "Delete a repository in an attached Sesame location",
+                "operationId": "deleteRepositoryUsingDELETE",
+                "produces": [
+                    "*/*"
+                ],
+                "parameters": [
+                    {
+                        "name": "location",
+                        "in": "query",
+                        "description": "location",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "repositoryID",
+                        "in": "path",
+                        "description": "repositoryID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/rest/repositories/{repositoryID}/download": {
+            "get": {
+                "tags": [
+                    "repository-management-controller"
+                ],
+                "summary": "Download repository configuration as a Turtle file",
+                "operationId": "downloadRepositoryConfigTurtleUsingGET",
+                "produces": [
+                    "text/turtle"
+                ],
+                "parameters": [
+                    {
+                        "name": "location",
+                        "in": "query",
+                        "description": "location",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "repositoryID",
+                        "in": "path",
+                        "description": "repositoryID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "500": {
+                        "description": "500 message",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/rest/repositories/{repositoryID}/downloadZip": {
+            "get": {
+                "tags": [
+                    "repository-management-controller"
+                ],
+                "summary": "Download repository configuration as a zip file",
+                "operationId": "downloadRepositoryConfigZipUsingGET",
+                "produces": [
+                    "application/zip"
+                ],
+                "parameters": [
+                    {
+                        "name": "location",
+                        "in": "query",
+                        "description": "location",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "repositoryID",
+                        "in": "path",
+                        "description": "repositoryID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "500": {
+                        "description": "500 message",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/rest/repositories/{repositoryID}/restart": {
+            "post": {
+                "tags": [
+                    "repository-management-controller"
+                ],
+                "summary": "Restart a repository",
+                "operationId": "restartRepositoryUsingPOST",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "*/*"
+                ],
+                "parameters": [
+                    {
+                        "name": "repositoryID",
+                        "in": "path",
+                        "description": "repositoryID",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "sync",
+                        "in": "query",
+                        "description": "sync",
+                        "required": false,
+                        "type": "boolean"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/rest/repositories/{repositoryID}/size": {
+            "get": {
+                "tags": [
+                    "repository-management-controller"
+                ],
+                "summary": "Get repository size",
+                "operationId": "repositorySizeUsingGET",
+                "produces": [
+                    "*/*"
+                ],
+                "parameters": [
+                    {
+                        "name": "location",
+                        "in": "query",
+                        "description": "location",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "repositoryID",
+                        "in": "path",
+                        "description": "repositoryID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/RepositorySizeInfo"
+                        }
+                    },
+                    "500": {
+                        "description": "500 message",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/rest/security": {
+            "get": {
+                "tags": [
+                    "security-management-controller"
+                ],
+                "summary": "Check if security is enabled",
+                "operationId": "isEnabledSecurityUsingGET",
+                "produces": [
+                    "*/*"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    "500": {
+                        "description": "500 message",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "deprecated": false
+            },
+            "post": {
+                "tags": [
+                    "security-management-controller"
+                ],
+                "summary": "Enable or disable security",
+                "operationId": "setEnableSecurityUsingPOST",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "*/*"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "useSecurity",
+                        "description": "useSecurity",
+                        "required": true,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/rest/security/freeaccess": {
+            "get": {
+                "tags": [
+                    "security-management-controller"
+                ],
+                "summary": "Check if free access is enabled",
+                "operationId": "isEnabledFreeAccessUsingGET",
+                "produces": [
+                    "*/*"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/AccessBean"
+                        }
+                    },
+                    "500": {
+                        "description": "500 message",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "deprecated": false
+            },
+            "post": {
+                "tags": [
+                    "security-management-controller"
+                ],
+                "summary": "Enable or disable free access",
+                "operationId": "setEnableFreeAccessUsingPOST",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "*/*"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "freeaccess",
+                        "description": "freeaccess",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/AccessBean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/rest/security/user": {
+            "get": {
+                "tags": [
+                    "security-management-controller"
+                ],
+                "summary": "Get all users",
+                "operationId": "getAllUsersUsingGET",
+                "produces": [
+                    "*/*"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Account"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "500 message",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/rest/security/user/**": {
+            "get": {
+                "tags": [
+                    "security-management-controller"
+                ],
+                "summary": "Get a user",
+                "operationId": "getUserUsingGET",
+                "produces": [
+                    "*/*"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "500": {
+                        "description": "500 message",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "deprecated": false
+            },
+            "post": {
+                "tags": [
+                    "security-management-controller"
+                ],
+                "summary": "Create a user",
+                "operationId": "createUserUsingPOST",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "text/plain"
+                ],
+                "parameters": [
+                    {
+                        "name": "X-GraphDB-Password",
+                        "in": "header",
+                        "description": "X-GraphDB-Password",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "user",
+                        "description": "user",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Account"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                },
+                "deprecated": false
+            },
+            "put": {
+                "tags": [
+                    "security-management-controller"
+                ],
+                "summary": "Edit a user",
+                "operationId": "editUserUsingPUT",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "*/*"
+                ],
+                "parameters": [
+                    {
+                        "name": "X-GraphDB-Password",
+                        "in": "header",
+                        "description": "X-GraphDB-Password",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "user",
+                        "description": "user",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Account"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                },
+                "deprecated": false
+            },
+            "delete": {
+                "tags": [
+                    "security-management-controller"
+                ],
+                "summary": "Delete a user",
+                "operationId": "deleteUserUsingDELETE",
+                "produces": [
+                    "*/*"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                },
+                "deprecated": false
+            },
+            "patch": {
+                "tags": [
+                    "security-management-controller"
+                ],
+                "summary": "Change settings for a user",
+                "operationId": "changeUserSettingsUsingPATCH",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "*/*"
+                ],
+                "parameters": [
+                    {
+                        "name": "X-GraphDB-Password",
+                        "in": "header",
+                        "description": "X-GraphDB-Password",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "user",
+                        "description": "user",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Account"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/rest/sparql-template": {
+            "get": {
+                "tags": [
+                    "sparql-template-controller"
+                ],
+                "summary": "Get IDs of all configured SPARQL templates per current active repository",
+                "operationId": "getSparqlTemplateIDsUsingGET",
+                "produces": [
+                    "*/*"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "500": {
+                        "description": "500 message",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/rest/sparql-template/configuration": {
+            "get": {
+                "tags": [
+                    "sparql-template-controller"
+                ],
+                "summary": "Get a SPARQL template configuration",
+                "operationId": "getSparqlTemplateContentUsingGET",
+                "produces": [
+                    "text/html"
+                ],
+                "parameters": [
+                    {
+                        "name": "templateID",
+                        "in": "query",
+                        "description": "The ID of the SPARQL template",
+                        "required": false,
+                        "type": "string",
+                        "allowEmptyValue": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "500": {
+                        "description": "500 message",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/rest/sparql-template/create": {
+            "post": {
+                "tags": [
+                    "sparql-template-controller"
+                ],
+                "summary": "Create a new SPARQL template",
+                "operationId": "createSparqlTemplateUsingPOST",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "*/*"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "sparqlTemplate",
+                        "description": "sparqlTemplate",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/SparqlTemplate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/rest/sparql-template/delete": {
+            "delete": {
+                "tags": [
+                    "sparql-template-controller"
+                ],
+                "summary": "Delete an existing SPARQL template",
+                "operationId": "deleteSparqlTemplateUsingDELETE",
+                "produces": [
+                    "*/*"
+                ],
+                "parameters": [
+                    {
+                        "name": "templateID",
+                        "in": "query",
+                        "description": "The ID of the SPARQL template",
+                        "required": false,
+                        "type": "string",
+                        "allowEmptyValue": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/rest/sparql-template/edit": {
+            "put": {
+                "tags": [
+                    "sparql-template-controller"
+                ],
+                "summary": "Edit an existing SPARQL template",
+                "operationId": "updateSparqlTemplateUsingPUT",
+                "consumes": [
+                    "text/html"
+                ],
+                "produces": [
+                    "*/*"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "content",
+                        "description": "The SPARQL template content",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "templateID",
+                        "in": "query",
+                        "description": "The ID of the SPARQL template",
+                        "required": false,
+                        "type": "string",
+                        "allowEmptyValue": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/rest/sparql/saved-queries": {
+            "get": {
+                "tags": [
+                    "saved-queries-controller"
+                ],
+                "summary": "Get all saved queries visible for the user or single saved query by name and owner.",
+                "operationId": "getQueriesUsingGET",
+                "produces": [
+                    "*/*"
+                ],
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "The name of the query",
+                        "required": false,
+                        "type": "string",
+                        "allowEmptyValue": false
+                    },
+                    {
+                        "name": "owner",
+                        "in": "query",
+                        "description": "owner",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "500": {
+                        "description": "500 message",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "deprecated": false
+            },
+            "post": {
+                "tags": [
+                    "saved-queries-controller"
+                ],
+                "summary": "Create a new saved query",
+                "operationId": "createQueryUsingPOST",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "*/*"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "query",
+                        "description": "query",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/SavedQuery"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                },
+                "deprecated": false
+            },
+            "put": {
+                "tags": [
+                    "saved-queries-controller"
+                ],
+                "summary": "Edit an existing saved query",
+                "operationId": "editSampleQueryUsingPUT",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "*/*"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "query",
+                        "description": "query",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/SavedQuery"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "deprecated": false
+            },
+            "delete": {
+                "tags": [
+                    "saved-queries-controller"
+                ],
+                "summary": "Delete an existing saved query",
+                "operationId": "deleteSampleQueryUsingDELETE",
+                "produces": [
+                    "*/*"
+                ],
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "The name of the query",
+                        "required": false,
+                        "type": "string",
+                        "allowEmptyValue": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/rest/sql-views/tables": {
+            "get": {
+                "tags": [
+                    "sql-views-controller"
+                ],
+                "summary": "Get all SQL view names for current repository.",
+                "operationId": "getSqlViewNamesUsingGET",
+                "produces": [
+                    "*/*"
+                ],
+                "parameters": [
+                    {
+                        "name": "X-GraphDB-Repository",
+                        "in": "header",
+                        "description": "The repository for which you want to use the JDBC driver",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "500": {
+                        "description": "500 message",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "deprecated": false
+            },
+            "post": {
+                "tags": [
+                    "sql-views-controller"
+                ],
+                "summary": "Create a new SQL view",
+                "operationId": "createSqlViewUsingPOST",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "*/*"
+                ],
+                "parameters": [
+                    {
+                        "name": "X-GraphDB-Repository",
+                        "in": "header",
+                        "description": "The repository for which you want to use the JDBC driver",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "sqlView",
+                        "description": "sqlView",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/SqlView"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        },
+        "/rest/sql-views/tables/{name}": {
+            "get": {
+                "tags": [
+                    "sql-views-controller"
+                ],
+                "summary": "Get a SQL view configuration.",
+                "operationId": "getSqlViewUsingGET",
+                "produces": [
+                    "*/*"
+                ],
+                "parameters": [
+                    {
+                        "name": "X-GraphDB-Repository",
+                        "in": "header",
+                        "description": "The repository for which you want to use the JDBC driver",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "The name of the SQL view",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "500": {
+                        "description": "500 message",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                },
+                "deprecated": false
+            },
+            "put": {
+                "tags": [
+                    "sql-views-controller"
+                ],
+                "summary": "Edit an existing SQL view",
+                "operationId": "updateSqlViewUsingPUT",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "*/*"
+                ],
+                "parameters": [
+                    {
+                        "name": "X-GraphDB-Repository",
+                        "in": "header",
+                        "description": "The repository for which you want to use the JDBC driver",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "The name of the SQL view",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "sqlView",
+                        "description": "sqlView",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/SqlView"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "deprecated": false
+            },
+            "delete": {
+                "tags": [
+                    "sql-views-controller"
+                ],
+                "summary": "Delete an existing saved query",
+                "operationId": "deleteSqlViewUsingDELETE",
+                "produces": [
+                    "*/*"
+                ],
+                "parameters": [
+                    {
+                        "name": "X-GraphDB-Repository",
+                        "in": "header",
+                        "description": "The repository for which you want to use the JDBC driver",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "The name of the SQL view",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                },
+                "deprecated": false
+            }
+        }
+    },
+    "definitions": {
+        "AccessBean": {
+            "type": "object",
+            "properties": {
+                "appSettings": {
+                    "type": "object"
+                },
+                "authorities": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "enabled": {
+                    "type": "boolean"
+                }
+            },
+            "title": "AccessBean"
+        },
+        "Account": {
+            "type": "object",
+            "properties": {
+                "appSettings": {
+                    "type": "object"
+                },
+                "dateCreated": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "grantedAuthorities": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            },
+            "title": "Account"
+        },
+        "DefaultRepositoryLocation": {
+            "type": "object",
+            "properties": {
+                "defaultRepository": {
+                    "type": "string",
+                    "description": "Default repository for the location."
+                }
+            },
+            "title": "DefaultRepositoryLocation"
+        },
+        "GraphDBRepository": {
+            "type": "object",
+            "properties": {
+                "externalUrl": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "local": {
+                    "type": "boolean"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "readable": {
+                    "type": "boolean"
+                },
+                "sesameType": {
+                    "type": "string"
+                },
+                "state": {
+                    "type": "string",
+                    "enum": [
+                        "INACTIVE",
+                        "STARTING",
+                        "RUNNING",
+                        "RESTARTING",
+                        "STOPPING"
+                    ]
+                },
+                "title": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "unsupported": {
+                    "type": "boolean"
+                },
+                "uri": {
+                    "type": "string"
+                },
+                "writable": {
+                    "type": "boolean"
+                }
+            },
+            "title": "GraphDBRepository"
+        },
+        "ImportSettings": {
+            "type": "object",
+            "properties": {
+                "baseURI": {
+                    "type": "string"
+                },
+                "context": {
+                    "type": "string"
+                },
+                "data": {
+                    "type": "string"
+                },
+                "forceSerial": {
+                    "type": "boolean"
+                },
+                "format": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "parserSettings": {
+                    "$ref": "#/definitions/ParserSettings"
+                },
+                "replaceGraphs": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "requestIdHeadersToForward": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "status": {
+                    "type": "string",
+                    "enum": [
+                        "PENDING",
+                        "IMPORTING",
+                        "DONE",
+                        "ERROR",
+                        "NONE",
+                        "INTERRUPTING"
+                    ]
+                },
+                "timestamp": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "type": {
+                    "type": "string"
+                }
+            },
+            "title": "ImportSettings"
+        },
+        "Location": {
+            "type": "object",
+            "properties": {
+                "active": {
+                    "type": "boolean",
+                    "description": "True if the location is the currently active one"
+                },
+                "authType": {
+                    "type": "string",
+                    "description": "Authentication type",
+                    "enum": [
+                        "none",
+                        "basic",
+                        "signature"
+                    ]
+                },
+                "defaultRepository": {
+                    "type": "string",
+                    "description": "Default repository for the location."
+                },
+                "errorMsg": {
+                    "type": "string",
+                    "description": "Error message, if there was an error connecting to this location"
+                },
+                "label": {
+                    "type": "string",
+                    "description": "Human readable label"
+                },
+                "local": {
+                    "type": "boolean",
+                    "description": "True if the location is local (on the same machine as the workbench)"
+                },
+                "password": {
+                    "type": "string",
+                    "description": "Password for the new location if any. This parameter only makes sense for remote locations"
+                },
+                "system": {
+                    "type": "boolean",
+                    "description": "True if the location is the system location"
+                },
+                "uri": {
+                    "type": "string",
+                    "description": "The GraphDB location URL"
+                },
+                "username": {
+                    "type": "string",
+                    "description": "Username for the new location if any. This parameter only makes sense for remote locations"
+                }
+            },
+            "title": "Location"
+        },
+        "LocationUri": {
+            "type": "object",
+            "properties": {
+                "uri": {
+                    "type": "string",
+                    "description": "The GraphDB location URL"
+                }
+            },
+            "title": "LocationUri"
+        },
+        "MasterConnectBean": {
+            "type": "object",
+            "properties": {
+                "bidirectional": {
+                    "type": "boolean"
+                },
+                "masterLocation": {
+                    "type": "string"
+                },
+                "masterNodeID": {
+                    "type": "string"
+                },
+                "peerLocation": {
+                    "type": "string"
+                },
+                "peerNodeID": {
+                    "type": "string"
+                },
+                "peerRepositoryID": {
+                    "type": "string"
+                }
+            },
+            "title": "MasterConnectBean"
+        },
+        "MasterNode": {
+            "type": "object",
+            "properties": {
+                "averageReadTime": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "completedReads": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "completedWrites": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "failedReads": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "failedWrites": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "isLocal": {
+                    "type": "boolean"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "mode": {
+                    "type": "string"
+                },
+                "nodeID": {
+                    "type": "string"
+                },
+                "peers": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/MasterNode"
+                    }
+                },
+                "pendingWrites": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "readonly": {
+                    "type": "boolean"
+                },
+                "runningReads": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "runningWrites": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "workers": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/WorkerNode"
+                    }
+                }
+            },
+            "title": "MasterNode"
+        },
+        "OwlimParameter": {
+            "type": "object",
+            "properties": {
+                "label": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "object"
+                }
+            },
+            "title": "OwlimParameter"
+        },
+        "ParserSettings": {
+            "type": "object",
+            "properties": {
+                "failOnUnknownDataTypes": {
+                    "type": "boolean"
+                },
+                "failOnUnknownLanguageTags": {
+                    "type": "boolean"
+                },
+                "normalizeDataTypeValues": {
+                    "type": "boolean"
+                },
+                "normalizeLanguageTags": {
+                    "type": "boolean"
+                },
+                "preserveBNodeIds": {
+                    "type": "boolean"
+                },
+                "stopOnError": {
+                    "type": "boolean"
+                },
+                "verifyDataTypeValues": {
+                    "type": "boolean"
+                },
+                "verifyLanguageTags": {
+                    "type": "boolean"
+                }
+            },
+            "title": "ParserSettings"
+        },
+        "RepositoryConfigBean": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "params": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/OwlimParameter"
+                    }
+                },
+                "sesameType": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            },
+            "title": "RepositoryConfigBean"
+        },
+        "RepositorySizeInfo": {
+            "type": "object",
+            "properties": {
+                "explicit": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "inferred": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "total": {
+                    "type": "integer",
+                    "format": "int64"
+                }
+            },
+            "title": "RepositorySizeInfo"
+        },
+        "SavedQuery": {
+            "type": "object",
+            "properties": {
+                "body": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "shared": {
+                    "type": "boolean"
+                }
+            },
+            "title": "SavedQuery"
+        },
+        "ServerImportBody": {
+            "type": "object",
+            "properties": {
+                "fileNames": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "importSettings": {
+                    "$ref": "#/definitions/ImportSettings"
+                }
+            },
+            "title": "ServerImportBody"
+        },
+        "SparqlTemplate": {
+            "type": "object",
+            "properties": {
+                "query": {
+                    "type": "string"
+                },
+                "templateID": {
+                    "type": "string"
+                }
+            },
+            "title": "SparqlTemplate"
+        },
+        "SqlColumn": {
+            "type": "object",
+            "properties": {
+                "column_name": {
+                    "type": "string"
+                },
+                "column_type": {
+                    "type": "string"
+                },
+                "nullable": {
+                    "type": "boolean"
+                },
+                "sparql_type": {
+                    "type": "string"
+                },
+                "sql_type_precision": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "sql_type_scale": {
+                    "type": "integer",
+                    "format": "int32"
+                }
+            },
+            "title": "SqlColumn"
+        },
+        "SqlView": {
+            "type": "object",
+            "properties": {
+                "columns": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/SqlColumn"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                },
+                "query": {
+                    "type": "string"
+                }
+            },
+            "title": "SqlView"
+        },
+        "UpdatedLocation": {
+            "type": "object",
+            "properties": {
+                "authType": {
+                    "type": "string",
+                    "description": "Authentication type",
+                    "enum": [
+                        "none",
+                        "basic",
+                        "signature"
+                    ]
+                },
+                "defaultRepository": {
+                    "type": "string",
+                    "description": "Default repository for the location."
+                },
+                "password": {
+                    "type": "string",
+                    "description": "Password for the new location if any. This parameter only makes sense for remote locations"
+                },
+                "uri": {
+                    "type": "string",
+                    "description": "The GraphDB location URL"
+                },
+                "username": {
+                    "type": "string",
+                    "description": "Username for the new location if any. This parameter only makes sense for remote locations"
+                }
+            },
+            "title": "UpdatedLocation"
+        },
+        "UserDetails": {
+            "type": "object",
+            "title": "UserDetails"
+        },
+        "WorkerCloneBean": {
+            "type": "object",
+            "properties": {
+                "cloningNodeLocation": {
+                    "type": "string"
+                },
+                "cloningNodeRepositoryID": {
+                    "type": "string"
+                },
+                "newNodeLocation": {
+                    "type": "string"
+                },
+                "newNodeRepositoryID": {
+                    "type": "string"
+                },
+                "newNodeTitle": {
+                    "type": "string"
+                }
+            },
+            "title": "WorkerCloneBean"
+        },
+        "WorkerConnectBean": {
+            "type": "object",
+            "properties": {
+                "masterLocation": {
+                    "type": "string"
+                },
+                "workerURL": {
+                    "type": "string"
+                }
+            },
+            "title": "WorkerConnectBean"
+        },
+        "WorkerNode": {
+            "type": "object",
+            "properties": {
+                "averageTaskTime": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "completedTasks": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "failedTasks": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "fingerprint": {
+                    "type": "string"
+                },
+                "isLocal": {
+                    "type": "boolean"
+                },
+                "lastError": {
+                    "type": "string"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "runningTasks": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            },
+            "title": "WorkerNode"
+        }
+    }
+}
