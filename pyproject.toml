@@ -4,7 +4,7 @@ version = "0.0.1"
 description = ""
 authors = ["Plamen Tarkalanov <plamen.tarkalanov@ontotext.com>"]
 packages = [
-    { include = "src/graphdb" }
+    { include = "graphdb", from="src" }
 ]
 
 [tool.poetry.dependencies]
