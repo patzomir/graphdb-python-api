@@ -485,8 +485,9 @@ class ApiClient(object):
             return 'application/json'
 
         content_types = [x.lower() for x in content_types]
-
-        if 'application/json' in content_types or '*/*' in content_types:
+        if 'Content-Type' in self.default_headers and self.default_headers['Content-Type'] in content_types:
+            return self.default_headers['Content-Type']
+        elif 'application/json' in content_types or '*/*' in content_types:
             return 'application/json'
         else:
             return content_types[0]

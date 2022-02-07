@@ -13,7 +13,7 @@
 
 from setuptools import setup, find_packages  # noqa: H301
 
-NAME = "swagger-client"
+NAME = "python-graphdb"
 VERSION = "1.0.0"
 # To install the library, run the following
 #
@@ -33,10 +33,10 @@ REQUIRES = [
 setup(
     name=NAME,
     version=VERSION,
-    description="GraphDB Workbench API",
+    description="GraphDB Workbench & RDF4J API",
     author_email="",
     url="",
-    keywords=["Swagger", "GraphDB Workbench API"],
+    keywords=["Swagger", "GraphDB Workbench API", "RDF4J API"],
     install_requires=REQUIRES,
     packages=find_packages(),
     include_package_data=True,
