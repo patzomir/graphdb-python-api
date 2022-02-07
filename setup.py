@@ -28,12 +28,17 @@ REQUIRES = [
     "six>=1.10",
     "urllib3>=1.23"
 ]
-    
+
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
 
 setup(
     name=NAME,
     version=VERSION,
     description="GraphDB Workbench & RDF4J API",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     author_email="",
     url="",
     keywords=["Swagger", "GraphDB Workbench API", "RDF4J API"],
