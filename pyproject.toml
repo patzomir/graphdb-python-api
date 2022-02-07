@@ -1,8 +1,11 @@
 [tool.poetry]
-name = "Python GraphDB"
-version = "0.1.0"
+name = "GraphDB Python"
+version = "0.0.1"
 description = ""
 authors = ["Plamen Tarkalanov <plamen.tarkalanov@ontotext.com>"]
+packages = [
+    { include = "src/graphdb" }
+]
 
 [tool.poetry.dependencies]
 python = "^3.8"
@@ -16,3 +19,5 @@ autopep8 = "^1.6.0"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+
