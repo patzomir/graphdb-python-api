@@ -17,21 +17,7 @@ Python 2.7 and 3.4+
 
 
 ```sh
-pip install git+https://github.com/patzomir/graphdb-python-api.git
-```
-(you may need to run `pip` with root permission: `sudo pip install git+https://github.com/patzomir/graphdb-python-api.git`)
-
-Then import the package:
-```python
-import graphdb
-```
-
-### Setuptools
-
-Install via [Setuptools](http://pypi.python.org/pypi/setuptools).
-
-```sh
-python setup.py install --user
+pip install graphdb-python
 ```
 (or `sudo python setup.py install` to install the package for all users)
 
@@ -70,13 +56,13 @@ except ApiException as e:
 ```python
 from __future__ import print_function
 import time
-import swagger_client
-from swagger_client.rest import ApiException
+import graphdb.graphdb_workbench
+from graphdb.graphdb_workbench.rest import ApiException
 from pprint import pprint
 
 # create an instance of the API class
-api_instance = swagger_client.ClusterManagementControllerApi(swagger_client.ApiClient(configuration))
-bean = swagger_client.WorkerCloneBean() # WorkerCloneBean | bean
+api_instance = graphdb.graphdb_workbench.ClusterManagementControllerApi(swagger_client.ApiClient(configuration))
+bean = graphdb.graphdb_workbench.WorkerCloneBean() # WorkerCloneBean | bean
 
 try:
     # Clone a worker
