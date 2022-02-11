@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "GraphDB Python"
-version = "0.0.4"
+version = "0.0.5"
 description = "GraphDB Python"
 authors = ["Plamen Tarkalanov <plamen.tarkalanov@ontotext.com>"]
 packages = [
