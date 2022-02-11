@@ -118,8 +118,8 @@ class SparqlApi(object):
             path_params['repositoryID'] = params['repository_id']  # noqa: E501
 
         query_params = []
-        if 'query' in params:
-            query_params.append(('query', params['query']))  # noqa: E501
+        # if 'query' in params:
+        #     query_params.append(('query', params['query']))  # noqa: E501
         if 'query_ln' in params:
             query_params.append(('queryLn', params['query_ln']))  # noqa: E501
         if 'infer' in params:
@@ -138,6 +138,8 @@ class SparqlApi(object):
         header_params = {}
 
         form_params = []
+        if 'query' in params:
+            form_params.append(('query', params['query']))  # noqa: E501
         local_var_files = {}
 
         body_params = None
@@ -149,7 +151,7 @@ class SparqlApi(object):
         auth_settings = []  # noqa: E501
 
         return self.api_client.call_api(
-            '/repositories/{repositoryID}', 'GET',
+            '/repositories/{repositoryID}', 'POST',
             path_params,
             query_params,
             header_params,
@@ -233,14 +235,14 @@ class SparqlApi(object):
             path_params['repositoryID'] = params['repository_id']  # noqa: E501
 
         query_params = []
-        if 'update' in params:
-            query_params.append(('update', params['update']))  # noqa: E501
         if 'base_uri' in params:
             query_params.append(('baseURI', params['base_uri']))  # noqa: E501
 
         header_params = {}
 
         form_params = []
+        if 'update' in params:
+            form_params.append(('update', params['update']))  # noqa: E501
         local_var_files = {}
 
         body_params = None
